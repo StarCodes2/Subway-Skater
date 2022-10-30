@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
 {
     private const int COIN_SCORE_AMOUNT = 5;
     public static GameManager Instance { set; get; }
+    public static bool mute = false;
 
     public bool IsDead { set; get; }
     private bool isGameStarted = false;

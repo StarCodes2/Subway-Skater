@@ -27,12 +27,15 @@ public class PlayerMotor : MonoBehaviour
     private float speedIncreaseTime = 2.5f;
     private float speedIncreaseAmount = 0.1f;
 
+    private AudioManager audioMnager;
+
     // Start is called before the first frame update
     private void Start()
     {
         speed = originalSpeed;
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+        audioMnager = FindObjectOfType<AudioManager>();
     }
 
     // Update is called once per frame
@@ -85,8 +88,10 @@ public class PlayerMotor : MonoBehaviour
             if (MobileInput.Instance.SwipeUp)
             {
                 // Jump
+                audioMnager.Play("jump");
                 anim.SetTrigger("Jump");
                 verticalVelocity = jumpForce;
+
             } else if (MobileInput.Instance.SwipeDown)
             {
                 // Slide
@@ -159,6 +164,7 @@ public class PlayerMotor : MonoBehaviour
 
     private void Crash()
     {
+        audioMnager.Play("crash");
         anim.SetTrigger("Death");
         isRunning = false;
         GameManager.Instance.OnDeath();
