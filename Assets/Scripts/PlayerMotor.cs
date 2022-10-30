@@ -15,7 +15,7 @@ public class PlayerMotor : MonoBehaviour
 
     // Movement
     private CharacterController controller;
-    private float jumpForce = 4.0f;
+    private float jumpForce = 4.0f; //4.0f
     private float gravity = 12.0f;
     private float verticalVelocity;
     private int desiredLane = 1; // 0 = Left, 1 = Middle, 2 = Right
@@ -36,7 +36,7 @@ public class PlayerMotor : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void Update()
+    private void FixedUpdate()
     {
         if (!isRunning)
             return;
@@ -95,7 +95,7 @@ public class PlayerMotor : MonoBehaviour
             }
         } else
         {
-            verticalVelocity -= (gravity * Time.deltaTime);
+            verticalVelocity -= (gravity * Time.fixedDeltaTime);
 
             // Fast falling mechanic
             if (MobileInput.Instance.SwipeDown)
@@ -107,7 +107,7 @@ public class PlayerMotor : MonoBehaviour
         moveVector.z = speed;
 
         // Move the Pengu
-        controller.Move(moveVector * Time.deltaTime);
+        controller.Move(moveVector * Time.fixedDeltaTime);
 
         // Rotate the Pengu to the direction he is going
         Vector3 dir = controller.velocity;
