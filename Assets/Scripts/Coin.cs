@@ -20,6 +20,7 @@ public class Coin : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            FindObjectOfType<AudioManager>().Play("pickup");
             GameManager.Instance.GetCoin();
             anim.SetTrigger("Collected");
         }

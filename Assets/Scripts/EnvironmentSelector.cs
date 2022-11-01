@@ -15,10 +15,11 @@ public class EnvironmentSelector : MonoBehaviour
             en.SetActive(false);
         }
 
+        selectedEnvironment = PlayerPrefs.GetInt("CurrentEnvironment", 0);
         environment[selectedEnvironment].SetActive(true);
     }
 
-    public void ChangeCharacter(int newEnvironment)
+    public void ChangeEnvironment(int newEnvironment)
     {
         environment[selectedEnvironment].SetActive(false);
         environment[newEnvironment].SetActive(true);

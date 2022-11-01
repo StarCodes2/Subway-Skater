@@ -38,4 +38,13 @@ public class AudioManager : MonoBehaviour {
 		s.source.Play();
 	}
 
+	public void Stop(string sound)
+	{
+		if (GameManager.mute)
+			return;
+
+		Sound s = Array.Find(sounds, item => item.name == sound);
+		s.source.Stop();
+	}
+
 }

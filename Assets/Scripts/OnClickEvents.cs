@@ -1,9 +1,9 @@
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OnClickEvents : MonoBehaviour
 {
-    public TextMeshProUGUI soundsText;
+    public Text soundsText;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +31,7 @@ public class OnClickEvents : MonoBehaviour
     public void ChangeEnvironmet(int selected)
     {
         PlayerPrefs.SetInt("CurrentEnvironment", selected);
+        FindObjectOfType<EnvironmentSelector>().ChangeEnvironment(selected);
     }
 
     public void QuitGame()

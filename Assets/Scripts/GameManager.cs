@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     private bool isGameStarted = false;
     private PlayerMotor motor;
     private int lastScore;
+    private AudioManager audioManager;
 
     // UI and UI fields
     public Animator menuAnim;
@@ -32,6 +33,7 @@ public class GameManager : MonoBehaviour
         modifierText.text = "x" + modifierScore.ToString("0.0");
         scoreText.text = score.ToString("0");
         coinText.text = coinScore.ToString();
+        audioManager = FindObjectOfType<AudioManager>();
 
         hiScoreText.text = PlayerPrefs.GetInt("Hiscore").ToString();
     }
@@ -41,12 +43,8 @@ public class GameManager : MonoBehaviour
     {
         if (MobileInput.Instance.Tap && !isGameStarted)
         {
-            isGameStarted = true;
-            motor.StartRunning();
-            FindObjectOfType<GlacierSpawner>().IsScrolling = true;
-            FindObjectOfType<CameraMotor>().IsMoving = true;
-            gameCanvas.SetTrigger("Show");
-            menuAnim.SetTrigger("Hide");
+            // moved to OnPlay function
+            //OnPlay();
         }
 
         if (isGameStarted && !IsDead)
@@ -81,9 +79,21 @@ public class GameManager : MonoBehaviour
         UnityEngine.SceneManagement.SceneManager.LoadScene("Game");
     }
 
+    public void OnPlay()
+    {
+        isGameStarted = true;
+        motor.StartRunning();
+        FindObjectOfType<GlacierSpawner>().IsScrolling = true;
+        FindObjectOfType<CameraMotor>().IsMoving = true;
+        gameCanvas.SetTrigger("Show");
+        menuAnim.SetTrigger("Hide");
+        audioManager.Play("background");
+    }
+
     public void OnDeath()
     {
         IsDead = true;
+        audioManager.Stop("background");
         FindObjectOfType<GlacierSpawner>().IsScrolling = false;
         deadScoreText.text = score.ToString("0");
         deadCoinText.text = coinScore.ToString("0");

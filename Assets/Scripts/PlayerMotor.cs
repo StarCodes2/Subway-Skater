@@ -27,7 +27,7 @@ public class PlayerMotor : MonoBehaviour
     private float speedIncreaseTime = 2.5f;
     private float speedIncreaseAmount = 0.1f;
 
-    private AudioManager audioMnager;
+    private AudioManager audioManager;
 
     // Start is called before the first frame update
     private void Start()
@@ -35,11 +35,11 @@ public class PlayerMotor : MonoBehaviour
         speed = originalSpeed;
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
-        audioMnager = FindObjectOfType<AudioManager>();
+        audioManager = FindObjectOfType<AudioManager>();
     }
 
     // Update is called once per frame
-    private void FixedUpdate()
+    private void Update()
     {
         if (!isRunning)
             return;
@@ -88,7 +88,7 @@ public class PlayerMotor : MonoBehaviour
             if (MobileInput.Instance.SwipeUp)
             {
                 // Jump
-                audioMnager.Play("jump");
+                audioManager.Play("jump");
                 anim.SetTrigger("Jump");
                 verticalVelocity = jumpForce;
 
@@ -100,19 +100,20 @@ public class PlayerMotor : MonoBehaviour
             }
         } else
         {
-            verticalVelocity -= (gravity * Time.fixedDeltaTime);
+            verticalVelocity -= (gravity * Time.deltaTime);
 
             // Fast falling mechanic
             if (MobileInput.Instance.SwipeDown)
             {
                 verticalVelocity = -jumpForce;
+                audioManager.Play("land");
             }
         }
         moveVector.y = verticalVelocity;
         moveVector.z = speed;
 
         // Move the Pengu
-        controller.Move(moveVector * Time.fixedDeltaTime);
+        controller.Move(moveVector * Time.deltaTime);
 
         // Rotate the Pengu to the direction he is going
         Vector3 dir = controller.velocity;
@@ -142,6 +143,7 @@ public class PlayerMotor : MonoBehaviour
     {
         desiredLane += (goingRight) ? 1 : -1;
         desiredLane = Mathf.Clamp(desiredLane, 0, 2);
+        audioManager.Play("move");
     }
 
     private bool IsGrounded()
@@ -151,7 +153,7 @@ public class PlayerMotor : MonoBehaviour
                 (controller.bounds.center.y - controller.bounds.extents.y) + 0.2f,
                 controller.bounds.center.z),
             Vector3.down);
-        Debug.DrawRay(groundRay.origin, groundRay.direction, Color.cyan, 1.0f);
+        //Debug.DrawRay(groundRay.origin, groundRay.direction, Color.cyan, 1.0f);
 
         return Physics.Raycast(groundRay, 0.2f + 0.1f);
     }
@@ -164,7 +166,7 @@ public class PlayerMotor : MonoBehaviour
 
     private void Crash()
     {
-        audioMnager.Play("crash");
+        audioManager.Play("crash");
         anim.SetTrigger("Death");
         isRunning = false;
         GameManager.Instance.OnDeath();
